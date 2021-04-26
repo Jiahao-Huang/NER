@@ -1,0 +1,5 @@
+cwd: .
+train: true
+use_gpu: true
+gpu_id: 0
+dataset: renmin

@@ -1,0 +1,6 @@
+cwd: '.'
+
+defaults:
+  - model: Bert
+  - train
+  - preprocess
