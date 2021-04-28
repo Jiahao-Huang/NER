@@ -5,8 +5,10 @@ import hydra
 import torch.nn as nn
 from torch import optim
 from hydra import utils
+from torch.utils.data import DataLoader
 
 from preprocess import preprocess
+from dataset import NERDataset
 
 logger = logging.getLogger(__name__)
 
@@ -21,8 +23,17 @@ def main(cfg):
         device = "cpu"
     logger.info(f"device: {device}")
     
-    corpus = preprocess(cfg)
+    if cfg.preprocess:
+        corpus = preprocess(cfg)
+
+    train_pkl_file = open(os.path.join(cfg.cwd, f"data/out/{cfg.dataset}/train.pkl"), "rb")
+    test_pkl_file = open(os.path.join(cfg.cwd, f"data/out/{cfg.dataset}/test.pkl"), "rb")
+
+    train_dataset = NERDataset(train_pkl_file)
+    test_dataset = NERDataset(test_pkl_file)
     
+    train_dataloader = DataLoader(train_dataset, cfg.batch_size, shuffle=True, )
+    test_dataloader = DataLoader(test_dataset, cfg.batch_size, shuffle=False, )
 
 if __name__ == "__main__":
     main()

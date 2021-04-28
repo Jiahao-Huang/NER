@@ -10,7 +10,9 @@ def txt2pkl(path):
     label_corpus = set()
     chars_file, words_file, labels_file = [], [], []
     with open(path) as f:
+        logger.info(f"Reading data from {path}...")
         lines = f.readlines()
+    
     for line in lines:
         chars_line, words_line, labels_line = [], [], []
         line = line.strip().split(' ')
@@ -46,14 +48,19 @@ def preprocess(cfg):
     train_txt_path = os.path.join(cfg.cwd, f"data/origin/{cfg.dataset}/train.txt")
     test_txt_path = os.path.join(cfg.cwd, f"data/origin/{cfg.dataset}/test.txt")
 
-    train_pkl_path = open(os.path.join(cfg.cwd, f"data/out/{cfg.dataset}/train.pkl"), "wb")
-    test_pkl_path = open(os.path.join(cfg.cwd, f"data/out/{cfg.dataset}/test.pkl"), "wb")
+    train_pkl_path = os.path.join(cfg.cwd, f"data/out/{cfg.dataset}/train.pkl")
+    test_pkl_path = os.path.join(cfg.cwd, f"data/out/{cfg.dataset}/test.pkl")
+
+    train_pkl_file = open(train_pkl_path, "wb")
+    test_pkl_file = open(test_pkl_path, "wb")
 
     train_data, corpus = txt2pkl(train_txt_path)
     test_data, _ = txt2pkl(test_txt_path)
 
-    pickle.dump(train_data, train_pkl_path)
-    pickle.dump(test_data, test_pkl_path)
+    logger.info(f"Saving train data to {train_pkl_path}...")
+    pickle.dump(train_data, train_pkl_file)
+    logger.info(f"Saving trest data to {test_pkl_path}...")
+    pickle.dump(test_data, test_pkl_file)
 
     return corpus
     
